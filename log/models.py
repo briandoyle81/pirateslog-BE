@@ -40,3 +40,6 @@ class Crewmate(models.Model):
 class Island(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+
+class Profile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
