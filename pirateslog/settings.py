@@ -28,6 +28,9 @@ DATABASES = {
     )
 }
 
+print("database:")
+print(DATABASES)
+
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
