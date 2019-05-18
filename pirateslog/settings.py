@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'log',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+#Rest Framework Auth
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ]
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -135,5 +142,5 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Configure Django App for Heroku - Fixes  bug where database won't update.  TODO:  Regression
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
