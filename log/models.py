@@ -43,4 +43,4 @@ class Island(models.Model):
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # friends = models.ManyToManyField(User, related_name='+')
+    friends = models.ManyToManyField(User, related_name='+')
