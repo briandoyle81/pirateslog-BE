@@ -26,7 +26,7 @@ class Entry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=200)
     ship = models.CharField(max_length=10, default='U', choices=SHIPS)
-    #enemyShip = models.CharField(max_length=10, default='U', choices=SHIPS)
+    enemyShip = models.CharField(max_length=10, default='U', choices=SHIPS)
     treasure = models.CharField(max_length=10, default='U', choices=TREASURE)
     tears = models.CharField(max_length=10, default='U', choices=TEARS)
     enemyCrewSize = models.IntegerField()
