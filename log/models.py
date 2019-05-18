@@ -23,6 +23,7 @@ class Entry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=200)
     ship = models.CharField(max_length=10, choices=SHIPS)
+    enemyShip = models.CharField(max_length=10, choices=SHIPS)
     treasure = models.CharField(max_length=10, choices=TREASURE)
     tears = models.CharField(max_length=10, choices=TEARS)
     enemyCrewSize = models.IntegerField()
