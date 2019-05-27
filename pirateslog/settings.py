@@ -38,6 +38,7 @@ DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = [config('ALLOWED_HOSTS')]
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'log',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'pirateslog.urls'
