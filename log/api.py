@@ -1,19 +1,25 @@
 from rest_framework import serializers, viewsets
-from .models import Entry, Island, Profile, User
+from .models import Entry, UserLogEntry, Island, Profile, User
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    # url = serializers.HyperlinkedIdentityField(view_name="log:id-detail")
+
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ("__all__")
 
 class UserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
+# class PermissionSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model: 
+
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta: 
         model = Entry
-        fields = "__all__"
+        fields = ('__all__')
         # fields = (
         #             'title',
         #             'user',
@@ -31,9 +37,32 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
         #             'last_modified',
         #         )
 
+
+
 class EntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
     queryset = Entry.objects.all()
+
+class UserEntrySerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = UserLogEntry
+        fields = ('__all__')
+
+class UserEntryViewset(viewsets.ModelViewSet):
+    serializer_class = UserEntrySerializer
+    queryset = UserLogEntry.objects.all()
+
+class MyEntryViewset(viewsets.ModelViewSet):
+    serializer_class = EntrySerializer
+    queryset = Entry.objects.none()
+
+    def get_queryset(self):
+        user = self.request.user
+        print(user)
+        if user.is_anonymous:
+            return Entry.objects.none()
+        else:
+            return Entry.objects.filter(user=user)
 
 class IslandSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
