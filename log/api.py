@@ -15,13 +15,15 @@ class UserViewset(viewsets.ModelViewSet):
 class EntrySerializer(serializers.ModelSerializer):
     crew = serializers.SlugRelatedField(
         many=True,
-        read_only=True,
-        slug_field='gamertag'
+        read_only=False,
+        slug_field='gamertag',
+        queryset=Profile.objects.all() #TODO: This will not scale
     )
     island = serializers.SlugRelatedField(
         many=False,
-        read_only=True,
-        slug_field='name'
+        read_only=False,
+        slug_field='name',
+        queryset=Island.objects.all()
     )
 
     class Meta: 
