@@ -33,7 +33,7 @@ class Entry(models.Model):
     tears = models.CharField(max_length=10, default='U', choices=TEARS)
     enemyCrewSize = models.IntegerField()
     crew = models.ManyToManyField('Profile', related_name='crewNames')
-    island = models.ForeignKey('Island', on_delete=models.SET_DEFAULT, default=1)
+    island = models.ForeignKey('Island', on_delete=models.SET_DEFAULT, default=1, related_name='islandName')
     content = models.TextField(blank=True)
     notes = models.TextField(blank=True)
     encounterTime = models.DateTimeField(auto_now=True, auto_now_add=False)
