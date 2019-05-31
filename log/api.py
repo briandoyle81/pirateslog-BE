@@ -12,11 +12,18 @@ class UserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-# class PermissionSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model: 
+class EntrySerializer(serializers.ModelSerializer):
+    crew = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='gamertag'
+    )
+    island = serializers.SlugRelatedField(
+        many=False,
+        read_only=True,
+        slug_field='name'
+    )
 
-class EntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta: 
         model = Entry
         fields = ('__all__')
@@ -64,7 +71,7 @@ class MyEntryViewset(viewsets.ModelViewSet):
         else:
             return Entry.objects.filter(user=user)
 
-class IslandSerializer(serializers.HyperlinkedModelSerializer):
+class IslandSerializer(serializers.Serializer):
     class Meta:
         model = Island
         fields = "__all__"
@@ -73,10 +80,21 @@ class IslandViewset(viewsets.ModelViewSet):
     serializer_class = IslandSerializer
     queryset = Island.objects.all()
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
+    myFriends = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='gamertag'
+    )
     class Meta:
         model = Profile
-        fields = "__all__"
+        fields = ('id', 'gamertag', 'myFriends',)
+
+    # id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # gamertag = models.CharField(max_length=15)
+    # friends = models.ManyToManyField('Profile', blank=True)
+
 
 class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer

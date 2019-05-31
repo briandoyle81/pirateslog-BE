@@ -32,16 +32,15 @@ class Entry(models.Model):
     treasure = models.CharField(max_length=10, default='U', choices=TREASURE)
     tears = models.CharField(max_length=10, default='U', choices=TEARS)
     enemyCrewSize = models.IntegerField()
-    crew = models.ManyToManyField(User, related_name="crew")
-    island = models.ForeignKey('Island', on_delete=models.SET_DEFAULT, default=1)
+    crew = models.ManyToManyField('Profile', related_name='crewNames')
+    island = models.ForeignKey('Island', on_delete=models.SET_DEFAULT, default=1, related_name='islandName')
     content = models.TextField(blank=True)
     notes = models.TextField(blank=True)
     encounterTime = models.DateTimeField(auto_now=True, auto_now_add=False)
     videoURL = models.URLField('URL', default='http://www.youtube.com')
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-    added_by = models.ForeignKey(get_user_model(),
-        null=True, blank=True, on_delete=models.SET_NULL)
+    added_by = models.ForeignKey('Profile', null=True, on_delete=models.SET_NULL)
 
     # #automatically save the current user in added_by
     # def save_model(self, request, obj, form, change):
@@ -68,10 +67,14 @@ class Island(models.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return '%s' % (self.name)
+
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    friends = models.ManyToManyField(User, related_name='friends')
+    gamertag = models.CharField(max_length=15)
+    friends = models.ManyToManyField('Profile', blank=True, related_name='myFriends')
 
     def __str__(self):
-            return self.name
+            return self.gamertag
