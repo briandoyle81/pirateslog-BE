@@ -18,7 +18,8 @@ from django.urls import path, include, re_path
 from django.conf.urls import url
 from rest_framework import routers
 from rest_framework.authtoken import views
-from log.api import UserViewset, EntryViewset, UserEntryViewset, MyEntryViewset,IslandViewset, ProfileViewset
+from log.api import UserViewset, EntryViewset, UserEntryViewset, MyEntryViewset, IslandViewset, ProfileViewset
+from log.views import exchange_token
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewset, 'user')
@@ -32,4 +33,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url('api/', include(router.urls)),
     re_path(r'^api-token-auth/', views.obtain_auth_token),
+    path('social_serializer/', exchange_token)
 ]

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_seed',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -131,7 +132,56 @@ USE_L10N = True
 
 USE_TZ = True
 
-#Rest Framework Auth
+# Enable Social Logins
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+
+# config per http://psa.matiasaguirre.net/docs/configuration/django.html#django-admin
+SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
+
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+# define a custom social auth pipeline.
+# The key thing here is to include email association. Both FB and Google
+# only return validated user emails, so email validation is safe.
+#
+# Don't do this if you wish to use an OAuth2 provider which doesn't
+# validate email addresses, as that opens up an attack vector.
+# An attacker targeting one of your users might create an account with
+# the OAuth2 provider, falsely claiming your user's email address as
+# their own. Without validation, that provider can't know otherwise.
+# They can then gain access to your user's account by logging in via
+# that OAuth2 provider.
+#
+# See here for more details:
+# http://psa.matiasaguirre.net/docs/use_cases.html#associate-users-by-email
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',  # <- this line not included by default
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+# LOGIN_URL = '/auth/login/google-oauth2/'
+
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
+
+# SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+# Rest Framework Auth
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
