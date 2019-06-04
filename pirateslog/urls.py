@@ -33,5 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url('api/', include(router.urls)),
     re_path(r'^api-token-auth/', views.obtain_auth_token),
-    path('social_serializer/', exchange_token)
+    path('social_serializer/', exchange_token),
+    url('' + r'social/(?P<backend>[^/]+)/$', exchange_token), # doesn't work
+    url('', include('social_django.urls', namespace='social')),
 ]

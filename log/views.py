@@ -30,6 +30,7 @@ class SocialSerializer(serializers.Serializer):
 @permission_classes([AllowAny])
 @psa()
 def exchange_token(request, backend):
+    
     """
     Exchange an OAuth2 access token for one for this site.
     This simply defers the entire OAuth2 process to the front end.
@@ -51,6 +52,7 @@ def exchange_token(request, backend):
     """
     serializer = SocialSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
+
         # set up non-field errors key
         # http://www.django-rest-framework.org/api-guide/exceptions/#exception-handling-in-rest-framework-views
         try:
@@ -59,6 +61,7 @@ def exchange_token(request, backend):
             nfe = 'non_field_errors'
 
         try:
+            print('Trying')
             # this line, plus the psa decorator above, are all that's necessary to
             # get and populate a user object for any properly enabled/configured backend
             # which python-social-auth can handle.

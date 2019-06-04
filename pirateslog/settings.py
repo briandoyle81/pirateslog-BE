@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', 
     'corsheaders.middleware.CorsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'pirateslog.urls'
@@ -141,6 +142,14 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
+for key in ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',]:
+    # Use exec instead of eval here because we're not just trying to evaluate a dynamic value here;
+    # we're setting a module attribute whose name varies.
+    exec("SOCIAL_AUTH_{key} = os.environ.get('{key}')".format(key=key))
+
+
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 
 # config per http://psa.matiasaguirre.net/docs/configuration/django.html#django-admin
@@ -179,7 +188,7 @@ SOCIAL_AUTH_PIPELINE = (
 # LOGIN_REDIRECT_URL = '/'
 # LOGOUT_REDIRECT_URL = '/'
 
-# SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # Rest Framework Auth
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
