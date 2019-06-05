@@ -61,19 +61,17 @@ class EntryViewset(viewsets.ModelViewSet):
 #     serializer_class = UserEntrySerializer
 #     queryset = UserLogEntry.objects.all()
 
+# Viewset returning all entries that I am in as crew
 class MyEntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
     queryset = Entry.objects.none()
 
     def get_queryset(self):
         # Use token to find right user
-        breakpoint()
-        user = self.request.user
-        print(user)
-        if user.is_anonymous:
-            return Entry.objects.none()
-        else:
-            return Entry.objects.filter(user=user)
+        # breakpoint()
+        profile = self.request.user.profile
+        
+        return Entry.objects.filter(crew__gamertag__contains=profile)
 
 class IslandSerializer(serializers.Serializer):
     class Meta:
