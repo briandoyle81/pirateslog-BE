@@ -151,7 +151,7 @@ for key in ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['google.com',]
+# SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['google.com',]
 
 # config per http://psa.matiasaguirre.net/docs/configuration/django.html#django-admin
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
