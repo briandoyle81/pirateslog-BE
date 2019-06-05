@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 from django.conf.urls import url
 from rest_framework import routers
 from rest_framework.authtoken import views
-from log.api import UserViewset, EntryViewset, UserEntryViewset, MyEntryViewset, IslandViewset, ProfileViewset
+from log.api import UserViewset, EntryViewset, MyEntryViewset, IslandViewset, ProfileViewset
 from log.views import exchange_token
 
 router = routers.DefaultRouter()
