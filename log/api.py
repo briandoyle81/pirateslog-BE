@@ -66,6 +66,8 @@ class MyEntryViewset(viewsets.ModelViewSet):
     queryset = Entry.objects.none()
 
     def get_queryset(self):
+        # Use token to find right user
+        breakpoint()
         user = self.request.user
         print(user)
         if user.is_anonymous:
