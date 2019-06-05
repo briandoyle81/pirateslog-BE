@@ -52,14 +52,14 @@ class EntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
     queryset = Entry.objects.all()
 
-class UserEntrySerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = UserLogEntry
-        fields = ('__all__')
+# class UserEntrySerializer(serializers.ModelSerializer):
+#     class Meta: 
+#         model = UserLogEntry
+#         fields = ('__all__')
 
-class UserEntryViewset(viewsets.ModelViewSet):
-    serializer_class = UserEntrySerializer
-    queryset = UserLogEntry.objects.all()
+# class UserEntryViewset(viewsets.ModelViewSet):
+#     serializer_class = UserEntrySerializer
+#     queryset = UserLogEntry.objects.all()
 
 class MyEntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer

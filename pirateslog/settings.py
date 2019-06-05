@@ -149,8 +149,9 @@ for key in ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',
     exec("SOCIAL_AUTH_{key} = os.environ.get('{key}')".format(key=key))
 
 
-
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['google.com',]
 
 # config per http://psa.matiasaguirre.net/docs/configuration/django.html#django-admin
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
@@ -195,6 +196,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',

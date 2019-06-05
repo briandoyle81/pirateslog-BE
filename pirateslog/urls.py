@@ -24,7 +24,7 @@ from log.views import exchange_token
 router = routers.DefaultRouter()
 router.register(r'users', UserViewset, 'user')
 router.register(r'entries', EntryViewset, 'entry')
-router.register(r'user_entries', UserEntryViewset, 'user_entry')
+# router.register(r'user_entries', UserEntryViewset, 'user_entry')
 router.register(r'my_entries', MyEntryViewset, 'my_entry')
 router.register(r'islands', IslandViewset, 'island')
 router.register(r'profiles', ProfileViewset, 'profile')
@@ -34,6 +34,6 @@ urlpatterns = [
     url('api/', include(router.urls)),
     re_path(r'^api-token-auth/', views.obtain_auth_token),
     path('social_serializer/', exchange_token),
-    url('' + r'social/(?P<backend>[^/]+)/$', exchange_token), # doesn't work
+    url('' + r'social/(?P<backend>[^/]+)/$', exchange_token),
     url('', include('social_django.urls', namespace='social')),
 ]
