@@ -1,4 +1,7 @@
 from rest_framework import serializers, viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+# from rest_framework.decorators import action
 from .models import Entry, UserLogEntry, Island, Profile, User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -66,21 +69,31 @@ class MyEntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
     queryset = Entry.objects.none()
 
+    def create(self, validated_data):
+        breakpoint()
+        pass
+
     def get_queryset(self):
         # Use token to find right user
         # breakpoint()
         profile = self.request.user.profile
-        
         return Entry.objects.filter(crew__gamertag__contains=profile)
 
-class IslandSerializer(serializers.Serializer):
+class IslandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Island
-        fields = "__all__"
+        fields = ('__all__')
 
 class IslandViewset(viewsets.ModelViewSet):
     serializer_class = IslandSerializer
-    queryset = Island.objects.all()
+    queryset = Island.objects.none()
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def create(self, request):
+        return Response("Islands may only be added in admin")
+
+    def get_queryset(self):
+        return Island.objects.all()
 
 class ProfileSerializer(serializers.ModelSerializer):
     myFriends = serializers.SlugRelatedField(
