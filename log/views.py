@@ -15,6 +15,8 @@ from requests.exceptions import HTTPError
 
 from social_django.utils import psa
 
+from .models import Profile
+
 
 class SocialSerializer(serializers.Serializer):
     """
@@ -81,6 +83,9 @@ def exchange_token(request, backend):
         if user:
             if user.is_active:
                 token, _ = Token.objects.get_or_create(user=user)
+                profile = Profile.objects .get_or_create(user=user)
+                print("got user " + user.profile.gamertag)
+                # TODO: Should just return profile here, but not serializible
                 return Response({'token': token.key})
             else:
                 # user is not active; at some point they deleted their account,

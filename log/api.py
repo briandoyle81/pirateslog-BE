@@ -110,7 +110,4 @@ class MyProfileViewset(viewsets.ModelViewSet):
     queryset = Profile.objects.none()
 
     def get_queryset(self):
-        # Use token to find right user
-        # breakpoint()
-        profile = self.request.user.profile
-        return Profile.objects.filter(gamertag__contains=profile)
+        return Profile.objects.filter(user=self.request.user)
