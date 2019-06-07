@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 from django.conf.urls import url
 from rest_framework import routers
 from rest_framework.authtoken import views
-from log.api import UserViewset, EntryViewset, MyEntryViewset, IslandViewset, ProfileViewset
+from log.api import UserViewset, EntryViewset, MyEntryViewset, IslandViewset, ProfileViewset, MyProfileViewset
 from log.views import exchange_token
 
 router = routers.DefaultRouter()
@@ -28,6 +28,7 @@ router.register(r'entries', EntryViewset, 'entry')
 router.register(r'my_entries', MyEntryViewset, 'my_entry')
 router.register(r'islands', IslandViewset, 'island')
 router.register(r'profiles', ProfileViewset, 'profile')
+router.register(r'my_profile', MyProfileViewset, 'my_profile')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

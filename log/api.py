@@ -49,20 +49,10 @@ class EntrySerializer(serializers.ModelSerializer):
         #             'last_modified',
         #         )
 
-
-
 class EntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
     queryset = Entry.objects.all()
-
-# class UserEntrySerializer(serializers.ModelSerializer):
-#     class Meta: 
-#         model = UserLogEntry
-#         fields = ('__all__')
-
-# class UserEntryViewset(viewsets.ModelViewSet):
-#     serializer_class = UserEntrySerializer
-#     queryset = UserLogEntry.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 # Viewset returning all entries that I am in as crew
 class MyEntryViewset(viewsets.ModelViewSet):
@@ -114,3 +104,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+class MyProfileViewset(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.none()
+
+    def get_queryset(self):
+        # Use token to find right user
+        # breakpoint()
+        profile = self.request.user.profile
+        return Profile.objects.filter(gamertag__contains=profile)
