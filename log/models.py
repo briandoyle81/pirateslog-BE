@@ -12,6 +12,7 @@ class Entry(models.Model):
         )
     TREASURE = (
             ('U', 'Unknown'),
+            ('N', 'None'),
             ('L', 'Low'),
             ('M', 'Medium'),
             ('H', 'High'),
@@ -19,6 +20,7 @@ class Entry(models.Model):
         )
     TEARS = (
             ('U', 'Unknown'),
+            ('N', 'None'),
             ('L', 'Low'),
             ('M', 'Medium'),
             ('H', 'High'),
