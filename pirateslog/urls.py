@@ -19,7 +19,7 @@ from django.conf.urls import url
 from rest_framework import routers
 from rest_framework.authtoken import views
 from log.api import UserViewset, EntryViewset, MyEntryViewset, IslandViewset, ProfileViewset, MyProfileViewset
-from log.views import exchange_token
+from log.views import exchange_token, update_gamertag
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewset, 'user')
@@ -36,5 +36,6 @@ urlpatterns = [
     re_path(r'^api-token-auth/', views.obtain_auth_token),
     path('social_serializer/', exchange_token),
     url('' + r'social/(?P<backend>[^/]+)/$', exchange_token),
+    url('' + r'update_gamertag/', update_gamertag),
     url('', include('social_django.urls', namespace='social')),
 ]

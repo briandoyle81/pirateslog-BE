@@ -7,8 +7,9 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
 from requests.exceptions import HTTPError
@@ -16,6 +17,25 @@ from requests.exceptions import HTTPError
 from social_django.utils import psa
 
 from .models import Profile
+from .api import ProfileSerializer
+
+
+# TODO: Do this and the method below belong here or in api.py?
+# TODO: Is this secure?
+# TODO: Gamertag validation
+@api_view(http_method_names=['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def update_gamertag(request):
+    print("updating gamertag to: ", request.data.get('name'))
+    newName = request.data.get('name')
+    profileValue = request.user.profile
+    dbProfile = Profile.objects.get(pk=profileValue.id)
+    dbProfile.gamertag = newName
+    dbProfile.save()
+    
+    #TODO: Serialize with ProfileSerializer and send whole profile object
+    return(Response(newName))
 
 
 class SocialSerializer(serializers.Serializer):
@@ -26,7 +46,6 @@ class SocialSerializer(serializers.Serializer):
         allow_blank=False,
         trim_whitespace=True,
     )
-
 
 @api_view(http_method_names=['POST'])
 @permission_classes([AllowAny])

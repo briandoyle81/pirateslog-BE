@@ -1,6 +1,8 @@
 from rest_framework import serializers, viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
+from rest_framework.decorators import list_route
 # from rest_framework.decorators import action
 from .models import Entry, UserLogEntry, Island, Profile, User
 
@@ -100,14 +102,24 @@ class ProfileSerializer(serializers.ModelSerializer):
     # gamertag = models.CharField(max_length=15)
     # friends = models.ManyToManyField('Profile', blank=True)
 
-
 class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
 class MyProfileViewset(viewsets.ModelViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
     serializer_class = ProfileSerializer
     queryset = Profile.objects.none()
+
+    # @list_route(methods=['post'])
+    # def updateUserName(self, request):
+    #     print(request)
+    #     breakpoint()
+
+    # def partial_update(self, request, pk=None):
+    #     breakpoint()
+    #     serializer = ProfileSerializer(request.user, data=request.data, partial=True)
 
     def get_queryset(self):
         return Profile.objects.filter(user=self.request.user)
