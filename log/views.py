@@ -16,9 +16,37 @@ from requests.exceptions import HTTPError
 
 from social_django.utils import psa
 
-from .models import Profile
+from .models import Profile, Entry, Island
 from .api import ProfileSerializer
 
+# TODO: Do this and the method below belong here or in api.py?
+# TODO: Is this secure?
+@api_view(http_method_names=['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def create_log(request):
+    print("creating log for: ", request.user.profile.gamertag)
+    crewProfiles = request.user.profile #TODO: Get other crewmembers
+
+    print("island is:", request.data.get('island'))
+    newEntry = Entry.objects.create(
+        title='None',
+        myShip=request.data.get('myShip'),
+        enemyShip=request.data.get('enemyShip'),
+        treasure=request.data.get('treasure'),
+        tears=request.data.get('tears'),
+        enemyCrewSize='0',
+        # crew=crewProfiles,
+        island=Island.objects.get(pk=request.data.get('island').get('value')),
+        content='none',
+        notes='none',
+        # encounterTime=request.data.get('')
+        videoURL='http://www.youtube.com'
+    )
+    newEntry.save()
+    
+    #TODO: Serialize with EntrySerializer and send whole profile object
+    return(Response("Entry Added"))
 
 # TODO: Do this and the method below belong here or in api.py?
 # TODO: Is this secure?
