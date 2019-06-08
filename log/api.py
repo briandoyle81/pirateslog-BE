@@ -105,6 +105,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class MyProfileViewset(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
