@@ -25,10 +25,8 @@ from .api import ProfileSerializer
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def create_log(request):
-    print("creating log for: ", request.user.profile.gamertag)
-    crewProfiles = request.user.profile #TODO: Get other crewmembers
-    breakpoint()
-    print("island is:", request.data.get('island'))
+    # crewList = request.data.get('crew')
+    # crewProfiles = Profile.objects.get(pk=request.data.get('crew').get('value'))
     newEntry = Entry.objects.create(
         title='None',
         myShip=request.data.get('myShip'),
@@ -43,6 +41,9 @@ def create_log(request):
         encounterTime=request.data.get('dateTime'),
         videoURL='http://www.youtube.com'
     )
+    newEntry.crew.add(request.user.profile)
+    for crewMember in request.data.get('crew'):
+        newEntry.crew.add(Profile.objects.get(pk=crewMember.get('value')))
     newEntry.save()
     
     #TODO: Serialize with EntrySerializer and send whole profile object
