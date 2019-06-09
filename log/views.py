@@ -27,7 +27,7 @@ from .api import ProfileSerializer
 def create_log(request):
     print("creating log for: ", request.user.profile.gamertag)
     crewProfiles = request.user.profile #TODO: Get other crewmembers
-
+    breakpoint()
     print("island is:", request.data.get('island'))
     newEntry = Entry.objects.create(
         title='None',
@@ -39,8 +39,8 @@ def create_log(request):
         # crew=crewProfiles,
         island=Island.objects.get(pk=request.data.get('island').get('value')),
         content='none',
-        notes='none',
-        # encounterTime=request.data.get('')
+        notes='none',   
+        encounterTime=request.data.get('dateTime'),
         videoURL='http://www.youtube.com'
     )
     newEntry.save()
