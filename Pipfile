@@ -18,6 +18,7 @@ django-cors-headers = "*"
 django-seed = "*"
 social-auth-app-django = "*"
 social-auth-core = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.7"

@@ -102,6 +102,7 @@ def exchange_token(request, backend):
     """
     serializer = SocialSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
+        print("serializer is valid")
 
         # set up non-field errors key
         # http://www.django-rest-framework.org/api-guide/exceptions/#exception-handling-in-rest-framework-views
@@ -117,6 +118,7 @@ def exchange_token(request, backend):
             # which python-social-auth can handle.
             user = request.backend.do_auth(serializer.validated_data['access_token'])
         except HTTPError as e:
+            print("http error from provider")
             # An HTTPError bubbled up from the request to the social auth provider.
             # This happens, at least in Google's case, every time you send a malformed
             # or incorrect access key.

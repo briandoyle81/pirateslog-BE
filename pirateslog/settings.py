@@ -138,21 +138,28 @@ USE_TZ = True
 
 # Enable Social Logins
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = config('SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = config('SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET')
+
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = config('SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID')
 
 for key in ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',
-            'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',]:
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',
+            'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY',
+            'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET']:
     # Use exec instead of eval here because we're not just trying to evaluate a dynamic value here;
     # we're setting a module attribute whose name varies.
     exec("SOCIAL_AUTH_{key} = os.environ.get('{key}')".format(key=key))
 
-
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_SCOPE = ['email', 'profile']
 
 # SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['google.com',]
 
@@ -160,6 +167,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
 
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+SOCIAL_AUTH_AZUREAD_OAUTH2_RESOURCE = 'https://graph.microsoft.com/'
 
 # define a custom social auth pipeline.
 # The key thing here is to include email association. Both FB and Google
