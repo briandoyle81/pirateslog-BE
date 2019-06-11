@@ -77,6 +77,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gamertag = models.CharField(max_length=15)
     verified = models.BooleanField(default=False)
+    verificationCode = models.CharField(max_length=6)
     friends = models.ManyToManyField('Profile', blank=True, related_name='myFriends')
 
     def __str__(self):

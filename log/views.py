@@ -11,12 +11,10 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
-
 from rest_framework.renderers import JSONRenderer
-
 from requests.exceptions import HTTPError
-
 from social_django.utils import psa
+from django.utils.crypto import get_random_string
 
 from .models import Profile, Entry, Island
 from .api import ProfileSerializer
@@ -134,6 +132,11 @@ def exchange_token(request, backend):
                 token, _ = Token.objects.get_or_create(user=user)
                 profile = Profile.objects.get_or_create(user=user)
                 print("got user " + user.profile.gamertag)
+                # TODO: Codes should expire
+                if(profile.verificationCode != null):
+                    print("creating verification code for new user")
+                    chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+                    profile.verificationCode = get_random_string(6, chars)
                 # TODO: fix serializer tuple related to friends gamertags
                 # serializedProfile = ProfileSerializer(profile)
                 # jsonResult = JSONRenderer.render(serializedProfile.data)
