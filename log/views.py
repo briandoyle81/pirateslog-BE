@@ -64,15 +64,25 @@ def update_gamertag(request):
     dbProfile = Profile.objects.get(pk=profileValue.id)
     dbProfile.gamertag = newName
     
-    #: Get the related xbox xuid
-    HEADERS = {'X-AUTH': xboxAPIToken}
-    r = requests.get(url='https://xboxapi.com/v2/xuid/' + newName, headers=HEADERS)
-    data = r.json()
-    print(data)
-    breakpoint()
-    dbProfile.xuid = data
-    dbProfile.save()
+    if newName != "":
+        #: Get the related xbox xuid
+        HEADERS = {'X-AUTH': xboxAPIToken}
+        r = requests.get(url='https://xboxapi.com/v2/xuid/' + newName, headers=HEADERS)
+        xuid = r.json()
+        dbProfile.xuid = xuid
+        dbProfile.save()
+        #: And send the validation code
+        HEADERS = {'X-AUTH': xboxAPIToken, 'Content-Type': 'application/json'}
+        DATA = {
+        "to": [
+            xuid
+        ],
+        "message": "Your verification code is " + dbProfile.verificationCode
+        }
 
+        r = requests.post(url='https://xboxapi.com/v2/messages', data=None, json=DATA, headers=HEADERS)
+        print(r)
+        print("code is " + dbProfile.verificationCode)
     #TODO: Serialize with ProfileSerializer and send whole profile object
     return(Response(newName))
 
@@ -142,7 +152,7 @@ def exchange_token(request, backend):
                 profile = Profile.objects.get_or_create(user=user)
                 print("got user " + user.profile.gamertag)
                 # TODO: Codes should expire
-                if(profile[0].verificationCode != None):
+                if(profile[0].verificationCode == ""):
                     print("creating verification code for new user")
                     chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
                     profile[0].verificationCode = get_random_string(6, chars)
