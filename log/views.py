@@ -126,20 +126,26 @@ def exchange_token(request, backend):
                 }},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
         if user:
             if user.is_active:
                 token, _ = Token.objects.get_or_create(user=user)
                 profile = Profile.objects.get_or_create(user=user)
                 print("got user " + user.profile.gamertag)
                 # TODO: Codes should expire
-                if(profile.verificationCode != null):
+                if(profile[0].verificationCode != None):
                     print("creating verification code for new user")
                     chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
-                    profile.verificationCode = get_random_string(6, chars)
+                    profile[0].verificationCode = get_random_string(6, chars)
+                    profile[0].save()
                 # TODO: fix serializer tuple related to friends gamertags
-                # serializedProfile = ProfileSerializer(profile)
-                # jsonResult = JSONRenderer.render(serializedProfile.data)
+                # serializedProfile = ProfileSerializer(data=profile[0])
+                # jsonProfile = JSONRenderer.render()
+                # breakpoint()
+                # if serializedProfile.is_valid(raise_exception=True):
+                #     pass
+                    # jsonResult = JSONRenderer.render(serializedProfile.data)
+                # else:
+                #     print("serialized profile didn't work")
                 # breakpoint()
                 # TODO: Should just return profile here, but not serializible
                 return Response({'token': token.key})
