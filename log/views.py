@@ -53,6 +53,21 @@ def create_log(request):
 
 # TODO: Do this and the method below belong here or in api.py?
 # TODO: Is this secure?
+@api_view(http_method_names=['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def verify_gamertag(request):
+    print("trying to verify gamertag")
+    profileValue = request.user.profile
+    dbProfile = Profile.objects.get(pk=profileValue.id)
+    if dbProfile.verificationCode == request.data.get('code'):
+        print("code matches")
+        dbProfile.verified = True
+        return(Response("true"))
+    return(Response("false"))
+
+# TODO: Do this and the method below belong here or in api.py?
+# TODO: Is this secure?
 # TODO: Gamertag validation
 @api_view(http_method_names=['POST'])
 @authentication_classes((TokenAuthentication,))
