@@ -19,6 +19,7 @@ django-seed = "*"
 social-auth-app-django = "*"
 social-auth-core = "*"
 cryptography = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"

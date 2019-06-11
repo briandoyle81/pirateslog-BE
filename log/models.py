@@ -76,6 +76,7 @@ class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gamertag = models.CharField(max_length=15)
+    xuid = models.IntegerField(null=True)
     verified = models.BooleanField(default=False)
     verificationCode = models.CharField(max_length=6)
     friends = models.ManyToManyField('Profile', blank=True, related_name='myFriends')

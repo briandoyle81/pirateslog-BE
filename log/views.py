@@ -16,6 +16,9 @@ from requests.exceptions import HTTPError
 from social_django.utils import psa
 from django.utils.crypto import get_random_string
 
+import requests
+xboxAPIToken = "f620e857d2edf0a17550eb47b0e029534e43f857"
+
 from .models import Profile, Entry, Island
 from .api import ProfileSerializer
 
@@ -34,7 +37,6 @@ def create_log(request):
         treasure=request.data.get('treasure'),
         tears=request.data.get('tears'),
         enemyCrewSize='0',
-        # crew=crewProfiles,
         island=Island.objects.get(pk=request.data.get('island').get('value')),
         content='none',
         notes='none',   
@@ -61,8 +63,16 @@ def update_gamertag(request):
     profileValue = request.user.profile
     dbProfile = Profile.objects.get(pk=profileValue.id)
     dbProfile.gamertag = newName
-    dbProfile.save()
     
+    #: Get the related xbox xuid
+    HEADERS = {'X-AUTH': xboxAPIToken}
+    r = requests.get(url='https://xboxapi.com/v2/xuid/' + newName, headers=HEADERS)
+    data = r.json()
+    print(data)
+    breakpoint()
+    dbProfile.xuid = data
+    dbProfile.save()
+
     #TODO: Serialize with ProfileSerializer and send whole profile object
     return(Response(newName))
 
@@ -137,7 +147,8 @@ def exchange_token(request, backend):
                     chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
                     profile[0].verificationCode = get_random_string(6, chars)
                     profile[0].save()
-                # TODO: fix serializer tuple related to friends gamertags
+
+                # TODO: fix serializer not being valid
                 # serializedProfile = ProfileSerializer(data=profile[0])
                 # jsonProfile = JSONRenderer.render()
                 # breakpoint()
