@@ -88,14 +88,14 @@ class IslandViewset(viewsets.ModelViewSet):
         return Island.objects.all()
 
 class ProfileSerializer(serializers.ModelSerializer):
-    myFriends = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='gamertag'
-    )
+    # myFriends = serializers.SlugRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     slug_field='gamertag'
+    # )
     class Meta:
         model = Profile
-        fields = ('id', 'gamertag', 'myFriends',)
+        fields = ('id', 'gamertag', 'verified')
 
     # id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     # user = models.OneToOneField(User, on_delete=models.CASCADE)
