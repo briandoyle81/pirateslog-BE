@@ -70,7 +70,7 @@ def verify_gamertag(request):
     if dbProfile.verificationCode == request.data.get('code'):
         print("code matches")
         dbProfile.verified = True
-        dbProfile.safe()
+        dbProfile.save()
         return(Response("true"))
     return(Response("false"))
 
