@@ -93,6 +93,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     #     read_only=True,
     #     slug_field='gamertag'
     # )
+    
     class Meta:
         model = Profile
         fields = ('id', 'gamertag', 'verified')
@@ -102,10 +103,16 @@ class ProfileSerializer(serializers.ModelSerializer):
     # gamertag = models.CharField(max_length=15)
     # friends = models.ManyToManyField('Profile', blank=True)
 
+# TODO:  This should filter for friends from the xboxAPI
 class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.none()
+
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Only return verified profiles
+    def get_queryset(self):
+        return Profile.objects.filter(verified=True)
 
 class MyProfileViewset(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
