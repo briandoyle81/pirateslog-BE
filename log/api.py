@@ -22,7 +22,7 @@ class EntrySerializer(serializers.ModelSerializer):
         many=True,
         read_only=False,
         slug_field='gamertag',
-        queryset=Profile.objects.all() #TODO: This will not scale
+        queryset=Profile.objects.all() #TODO: This will not scale?
     )
     island = serializers.SlugRelatedField(
         many=False,
@@ -34,26 +34,11 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta: 
         model = Entry
         fields = ('__all__')
-        # fields = (
-        #             'title',
-        #             'user',
-        #             'ship',
-        #             'enemyShip',
-        #             'loss',
-        #             'treasure',
-        #             'tears',
-        #             'enemyCrewSize',
-        #             # 'crew',
-        #             #'island',
-        #             'content',
-        #             'encounterTime',
-        #             'created_at',
-        #             'last_modified',
-        #         )
+       
 
 class EntryViewset(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
-    queryset = Entry.objects.all()
+    queryset = Entry.objects.all().order_by('-encounterTime')
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 # Viewset returning all entries that I am in as crew
