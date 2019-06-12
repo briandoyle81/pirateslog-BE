@@ -15,6 +15,8 @@ from rest_framework.renderers import JSONRenderer
 from requests.exceptions import HTTPError
 from social_django.utils import psa
 from django.utils.crypto import get_random_string
+from django.core import serializers as core_serializers
+import json
 
 import requests
 xboxAPIToken = "f620e857d2edf0a17550eb47b0e029534e43f857"
@@ -44,8 +46,13 @@ def create_log(request):
         videoURL='http://www.youtube.com'
     )
     newEntry.crew.add(request.user.profile)
-    for crewMember in request.data.get('crew'):
-        newEntry.crew.add(Profile.objects.get(pk=crewMember.get('value')))
+
+    # Only add crew for validated users
+    dbProfile = Profile.objects.get(pk=request.user.profile.id)
+    if dbProfile.verified:
+        for crewMember in request.data.get('crew'):
+            newEntry.crew.add(Profile.objects.get(pk=crewMember.get('value')))
+
     newEntry.save()
     
     #TODO: Serialize with EntrySerializer and send whole profile object
@@ -175,18 +182,12 @@ def exchange_token(request, backend):
                 profile = Profile.objects.get_or_create(user=user)
                 print("got user " + user.profile.gamertag)
                
-                # TODO: fix serializer not being valid
-                # serializedProfile = ProfileSerializer(data=profile[0])
-                # jsonProfile = JSONRenderer.render()
-                # breakpoint()
-                # if serializedProfile.is_valid(raise_exception=True):
-                #     pass
-                    # jsonResult = JSONRenderer.render(serializedProfile.data)
-                # else:
-                #     print("serialized profile didn't work")
-                # breakpoint()
-                # TODO: Should just return profile here, but not serializible
-                return Response({'token': token.key})
+                # TODO: Should this use the rest_framework serializer?
+                profile[0].verificationCode = "" # Hide verification code from client
+                data = core_serializers.serialize('json', [profile[0],])
+                struct = json.loads(data) # remove array wrapper before return
+                finalProfile = json.dumps(struct[0].get('fields'))
+                return Response({'token': token.key, 'profile': finalProfile})
             else:
                 # user is not active; at some point they deleted their account,
                 # or were banned by a superuser. They can't just log in with their
