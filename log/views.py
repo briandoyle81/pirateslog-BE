@@ -29,6 +29,24 @@ from .api import ProfileSerializer
 @api_view(http_method_names=['POST'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
+def remove_me(request):
+    dbEntry = Entry.objects.get(pk=request.data.get('id'))
+    # doublecheck user is found and remove
+    # TODO: Doublecheck user isn't creator of entry
+    filter = dbEntry.crew.filter(gamertag = request.user.profile.gamertag)
+    if filter != None:
+        dbEntry.crew.remove(request.user.profile)
+        dbEntry.save()
+        return(Response("Removed from entry"))
+    else:
+        return(Response("User not in entry"))
+
+
+# TODO: Do this and the method below belong here or in api.py? EDIT: Now sure it should be in api.py
+# TODO: Is this secure?  Where does request.user.FOO come from?
+@api_view(http_method_names=['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def create_log(request):
     # crewList = request.data.get('crew')
     # crewProfiles = Profile.objects.get(pk=request.data.get('crew').get('value'))

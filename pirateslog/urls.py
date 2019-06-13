@@ -19,7 +19,7 @@ from django.conf.urls import url
 from rest_framework import routers
 from rest_framework.authtoken import views
 from log.api import UserViewset, EntryViewset, MyEntryViewset, IslandViewset, ProfileViewset, MyProfileViewset
-from log.views import exchange_token, update_gamertag, create_log, verify_gamertag
+from log.views import exchange_token, update_gamertag, create_log, verify_gamertag, remove_me
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewset, 'user')
@@ -39,5 +39,6 @@ urlpatterns = [
     url('' + r'update_gamertag/', update_gamertag),
     url('' + r'create_log/', create_log),
     url('' + r'verify_gamertag/', verify_gamertag),
+    url('' + r'remove_me/', remove_me),
     url('', include('social_django.urls', namespace='social')),
 ]
