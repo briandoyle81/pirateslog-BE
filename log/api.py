@@ -30,6 +30,12 @@ class EntrySerializer(serializers.ModelSerializer):
         slug_field='name',
         queryset=Island.objects.all()
     )
+    added_by = serializers.SlugRelatedField(
+        many=False,
+        read_only=False,
+        slug_field='gamertag',
+        queryset=Profile.objects.all() #TODO: This will not scale?
+    )
 
     class Meta: 
         model = Entry

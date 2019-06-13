@@ -25,7 +25,7 @@ from .models import Profile, Entry, Island
 from .api import ProfileSerializer
 
 # TODO: Do this and the method below belong here or in api.py?
-# TODO: Is this secure?
+# TODO: Is this secure?  Where does request.user.FOO come from?
 @api_view(http_method_names=['POST'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
@@ -43,11 +43,12 @@ def create_log(request):
         content='none',
         notes='none',   
         encounterTime=request.data.get('dateTime'),
-        videoURL='http://www.youtube.com'
+        videoURL='http://www.youtube.com',
+        added_by=request.user.profile
     )
     newEntry.crew.add(request.user.profile)
 
-    # Only add crew for validated users
+    # Only add crew for validated users.
     dbProfile = Profile.objects.get(pk=request.user.profile.id)
     if dbProfile.verified:
         for crewMember in request.data.get('crew'):

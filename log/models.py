@@ -42,7 +42,7 @@ class Entry(models.Model):
     videoURL = models.URLField('URL', default='http://www.youtube.com')
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-    added_by = models.ForeignKey('Profile', null=True, on_delete=models.SET_NULL)
+    added_by = models.ForeignKey('Profile', null=True, on_delete=models.SET_NULL) # TODO: This shouldn't be nullable
 
     # #automatically save the current user in added_by
     # def save_model(self, request, obj, form, change):
