@@ -38,7 +38,7 @@ class Entry(models.Model):
     island = models.ForeignKey('Island', on_delete=models.SET_DEFAULT, default=1, related_name='islandName')
     content = models.TextField(blank=True)
     notes = models.TextField(blank=True)
-    encounterTime = models.DateTimeField(auto_now=True, auto_now_add=False)
+    encounterTime = models.DateTimeField(auto_now=False, auto_now_add=False)
     videoURL = models.URLField('URL', default='http://www.youtube.com')
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
