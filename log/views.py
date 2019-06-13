@@ -48,8 +48,12 @@ def remove_me(request):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def create_log(request):
-    # crewList = request.data.get('crew')
-    # crewProfiles = Profile.objects.get(pk=request.data.get('crew').get('value'))
+    # Handle missing island by using first entry as default
+    if request.data.get('island') != {}:
+        newIsland = Island.objects.get(pk=request.data.get('island').get('value'))
+    else:
+        newIsland = Island.objects.all()[0] # TODO: May be inefficent, but first island isn't id=0
+
     newEntry = Entry.objects.create(
         title='None',
         myShip=request.data.get('myShip'),
@@ -57,7 +61,7 @@ def create_log(request):
         treasure=request.data.get('treasure'),
         tears=request.data.get('tears'),
         enemyCrewSize='0',
-        island=Island.objects.get(pk=request.data.get('island').get('value')),
+        island=newIsland,
         content='none',
         notes='none',   
         encounterTime=request.data.get('dateTime'),
