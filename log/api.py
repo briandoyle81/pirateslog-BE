@@ -56,6 +56,17 @@ class MyEntryViewset(viewsets.ModelViewSet):
         breakpoint()
         pass
 
+    def delete(self, request, pk):
+        breakpoint()
+        # Get object with this pk
+        entry = get_object_or_404(Entry.objects.all(), pk=pk)
+        # Only delete if it belongs to the user
+        if request.user == entry.user:
+            entry.delete()
+            return Response({"message": "Article with id '{}' has been deleted.".format(pk)}, status=204)
+        else:
+            return Response({"message": "User not allowed to delete this entry."}, status=401) # TODO: Verify status
+            
     def get_queryset(self):
         # Use token to find right user
         # breakpoint()
