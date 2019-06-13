@@ -60,7 +60,7 @@ class MyEntryViewset(viewsets.ModelViewSet):
         # Use token to find right user
         # breakpoint()
         profile = self.request.user.profile
-        return Entry.objects.filter(crew__gamertag__contains=profile)
+        return Entry.objects.filter(crew__gamertag__contains=profile).order_by('-encounterTime')
 
 class IslandSerializer(serializers.ModelSerializer):
     class Meta:
