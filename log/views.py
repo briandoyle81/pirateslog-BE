@@ -49,8 +49,9 @@ def remove_me(request):
 @permission_classes((IsAuthenticated,))
 def create_log(request):
     # Handle missing island by using first entry as default
+    
     if request.data.get('island') != {}:
-        newIsland = Island.objects.get(pk=request.data.get('island').get('value'))
+        newIsland = Island.objects.get(pk=request.data.get('island').get('value')) #This is value to match react-select data
     else:
         newIsland = Island.objects.all()[0] # TODO: May be inefficent, but first island isn't id=0
 
@@ -118,23 +119,24 @@ def update_gamertag(request):
             dbProfile.verificationCode = get_random_string(6, chars)
 
         #: Get the related xbox xuid
-        HEADERS = {'X-AUTH': xboxAPIToken}
-        r = requests.get(url='https://xboxapi.com/v2/xuid/' + newName, headers=HEADERS)
-        xuid = r.json()
-        dbProfile.xuid = xuid
+        # Temporarily disabling - token keeps expiring
+        # HEADERS = {'X-AUTH': xboxAPIToken}
+        # r = requests.get(url='https://xboxapi.com/v2/xuid/' + newName, headers=HEADERS)
+        # xuid = r.json()
+        # dbProfile.xuid = xuid
         
-        #: And send the validation code
-        HEADERS = {'X-AUTH': xboxAPIToken, 'Content-Type': 'application/json'}
-        DATA = {
-        "to": [
-            xuid
-        ],
-        "message": "Your verification code is " + dbProfile.verificationCode
-        }
+        # #: And send the validation code
+        # HEADERS = {'X-AUTH': xboxAPIToken, 'Content-Type': 'application/json'}
+        # DATA = {
+        # "to": [
+        #     xuid
+        # ],
+        # "message": "Your verification code is " + dbProfile.verificationCode
+        # }
 
-        r = requests.post(url='https://xboxapi.com/v2/messages', data=None, json=DATA, headers=HEADERS)
-        print(r)
-        print("code is " + dbProfile.verificationCode)
+        # r = requests.post(url='https://xboxapi.com/v2/messages', data=None, json=DATA, headers=HEADERS)
+        # print(r)
+        # print("code is " + dbProfile.verificationCode)
     
     dbProfile.save()
     #TODO: Serialize with ProfileSerializer and send whole profile object
