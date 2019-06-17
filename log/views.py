@@ -69,12 +69,14 @@ def create_log(request):
         videoURL='http://www.youtube.com',
         added_by=request.user.profile
     )
+    # Add the reporter as crew
     newEntry.crew.add(request.user.profile)
 
     # Only add crew for validated users.
     dbProfile = Profile.objects.get(pk=request.user.profile.id)
-    if dbProfile.verified:
-        for crewMember in request.data.get('crew'):
+    reportedCrew = request.data.get('crew')
+    if dbProfile.verified and reportedCrew != None:
+        for crewMember in reportedCrew:
             newEntry.crew.add(Profile.objects.get(pk=crewMember.get('value')))
 
     newEntry.save()
