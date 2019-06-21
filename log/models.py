@@ -9,6 +9,11 @@ class Entry(models.Model):
             ('S', 'Sloop'),
             ('B', 'Brig'),
             ('G', 'Galleon'),
+            ('K', 'Karen'),
+            ('M', 'Meg'),
+            ('SK', 'Skelleon'),
+            ('F', 'Fort'),
+            ('SC', 'Ship Cloud'),
         )
     TREASURE = (
             ('U', 'Unknown'),
