@@ -20,6 +20,7 @@ social-auth-app-django = "*"
 social-auth-core = "*"
 cryptography = "*"
 requests = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"

@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import list_route
 # from rest_framework.decorators import action
 from .models import Entry, UserLogEntry, Island, Profile, User
+from django.shortcuts import get_object_or_404
+
+import uuid
 
 class UserSerializer(serializers.ModelSerializer):
     # url = serializers.HyperlinkedIdentityField(view_name="log:id-detail")
@@ -56,10 +59,45 @@ class MyEntryViewset(viewsets.ModelViewSet):
         breakpoint()
         pass
 
+    # TODO: Investigate put/update vs. patch/partial_update
+    def update(self, request, pk):
+        entry = get_object_or_404(Entry.objects.all(), pk=uuid.UUID(pk))
+        # Only update if it belongs to the user
+        if request.user.profile == entry.added_by:
+            if request.data.get('island')[0] != {}:
+                newIsland = Island.objects.get(pk=request.data.get('island')[0].get('value')) #This is value to match react-select data
+            else:
+                newIsland = Island.objects.all()[0] # TODO: May be inefficent, but first island isn't id=0
+
+            entry.myShip=request.data.get('myShip')
+            entry.enemyShip=request.data.get('enemyShip')
+            entry.treasure=request.data.get('treasure')
+            entry.tears=request.data.get('tears')
+            entry.island=newIsland
+            encounterTime=request.data.get('dateTime')
+
+            entry.crew.set([])
+            entry.crew.add(request.user.profile)
+
+            # Only add crew for validated users.
+            dbProfile = Profile.objects.get(pk=request.user.profile.id)
+            reportedCrew = request.data.get('crew')
+            if dbProfile.verified and reportedCrew != None:
+                for crewMember in reportedCrew:
+                    entry.crew.add(Profile.objects.get(pk=crewMember.get('value')))
+
+            entry.save()
+
+            return Response({"message": "Article with id '{}' has been updated.".format(pk)}, status=204)
+        else:
+            return Response({"message": "User not allowed to update this entry."}, status=401) # TODO: Verify status
+
+
+    # TODO: This is not utilized
     def delete(self, request, pk):
-        breakpoint()
         # Get object with this pk
         entry = get_object_or_404(Entry.objects.all(), pk=pk)
+        breakpoint()
         # Only delete if it belongs to the user
         if request.user == entry.user:
             entry.delete()
