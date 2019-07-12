@@ -67,7 +67,8 @@ def create_log(request):
         notes='none',   
         encounterTime=request.data.get('dateTime'),
         videoURL='http://www.youtube.com',
-        added_by=request.user.profile
+        added_by=request.user.profile,
+        map_location=newIsland.location
     )
     # Add the reporter as crew
     newEntry.crew.add(request.user.profile)
