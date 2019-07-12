@@ -70,6 +70,7 @@ def create_log(request):
         added_by=request.user.profile,
         map_location=newIsland.location
     )
+    
     # Add the reporter as crew
     newEntry.crew.add(request.user.profile)
 
