@@ -48,6 +48,7 @@ class Entry(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     added_by = models.ForeignKey('Profile', null=True, on_delete=models.SET_NULL) # TODO: This shouldn't be nullable
+    map_location = location = models.CharField(max_length=10, default='Unknown')
 
     # #automatically save the current user in added_by
     # def save_model(self, request, obj, form, change):
@@ -70,6 +71,7 @@ class UserLogEntry(Entry):
 class Island(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, default='At Sea')
+    location = models.CharField(max_length=10, default='Unknown')
     
     def __str__(self):
         return self.name
