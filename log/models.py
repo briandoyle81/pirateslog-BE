@@ -50,18 +50,6 @@ class Entry(models.Model):
     added_by = models.ForeignKey('Profile', null=True, on_delete=models.SET_NULL) # TODO: This shouldn't be nullable
     map_location = models.CharField(max_length=10, default='Unknown')
 
-    # #automatically save the current user in added_by
-    # def save_model(self, request, obj, form, change):
-    #     obj.added_by = request.user
-    #     super().save_model(request, obj, form, change)
-
-    # #automatically save the current user in added_by (possibly just from admin)
-    # def save_model(self, request, obj, form, change):
-    #     if not obj.pk:
-    #         # Only set added_by during the first save.
-    #         obj.added_by = request.user
-    #     super().save_model(request, obj, form, change)
-
     def __str__(self):
         return self.title
 
