@@ -64,13 +64,14 @@ def create_log(request):
         enemyCrewSize='0',
         island=newIsland,
         content='none',
-        notes='none',   
+        notes='none',  
         encounterTime=request.data.get('dateTime'),
         videoURL='http://www.youtube.com',
         added_by=request.user.profile,
-        map_location=newIsland.location
+        map_location=newIsland.location,
+        loss=request.data.get('loss')
     )
-    
+
     # Add the reporter as crew
     newEntry.crew.add(request.user.profile)
 
@@ -180,6 +181,9 @@ def exchange_token(request, backend):
     Requests must include the following field
     - `access_token`: The OAuth2 access token provided by the provider
     """
+    # Determine if this is an 
+
+
     serializer = SocialSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         
