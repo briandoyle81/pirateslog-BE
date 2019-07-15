@@ -49,7 +49,6 @@ def remove_me(request):
 @permission_classes((IsAuthenticated,))
 def create_log(request):
     # Handle missing island by using first entry as default
-    
     if request.data.get('island') != {}:
         newIsland = Island.objects.get(pk=request.data.get('island').get('value')) #This is value to match react-select data
     else:
@@ -64,7 +63,7 @@ def create_log(request):
         enemyCrewSize='0',
         island=newIsland,
         content='none',
-        notes='none',  
+        notes='none',
         encounterTime=request.data.get('dateTime'),
         videoURL='http://www.youtube.com',
         added_by=request.user.profile,

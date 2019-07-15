@@ -74,7 +74,8 @@ class MyEntryViewset(viewsets.ModelViewSet):
             entry.treasure=request.data.get('treasure')
             entry.tears=request.data.get('tears')
             entry.island=newIsland
-            encounterTime=request.data.get('dateTime')
+            # entry.encounterTime=request.data.get('dateTime')  For now do not update
+            entry.loss=request.data.get('loss')
 
             entry.crew.set([])
             entry.crew.add(request.user.profile)
