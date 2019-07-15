@@ -64,8 +64,8 @@ class MyEntryViewset(viewsets.ModelViewSet):
         entry = get_object_or_404(Entry.objects.all(), pk=uuid.UUID(pk))
         # Only update if it belongs to the user
         if request.user.profile == entry.added_by:
-            if request.data.get('island')[0] != {}:
-                newIsland = Island.objects.get(pk=request.data.get('island')[0].get('value')) #This is value to match react-select data
+            if request.data.get('island') != {}:
+                newIsland = Island.objects.get(pk=request.data.get('island').get('value')) #This is value to match react-select data
             else:
                 newIsland = Island.objects.all()[0] # TODO: May be inefficent, but first island isn't id=0
 
