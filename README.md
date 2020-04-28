@@ -1,3 +1,3 @@
 # pirateslog-BE
 
-This is a test
+Django BE server for pirateslog.app
